@@ -30,7 +30,7 @@ class LinebotController < ApplicationController
             },
             {
               type: 'image',
-              originalContentUrl: 'https://ja.wikipedia.org/wiki/Ruby#/media/File:Ruby-logo-notext.png'
+              originalContentUrl: 'https://ja.wikipedia.org/wiki/Ruby#/media/File:Ruby-logo-notext.png',
               previewImageUrl: 'https://ja.wikipedia.org/wiki/Ruby#/media/File:Ruby-logo-notext.png'
             }
           ]
