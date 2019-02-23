@@ -23,22 +23,31 @@ class LinebotController < ApplicationController
       when Line::Bot::Event::Message
         case event.type
         when Line::Bot::Event::MessageType::Text
-          messages = [
-            {
-              type: 'text',
-              text: event.message['text']
-            },
-            {
-              type: 'image',
-              originalContentUrl: 'https://ja.wikipedia.org/wiki/Ruby#/media/File:Ruby-logo-notext.png',
-              previewImageUrl: 'https://ja.wikipedia.org/wiki/Ruby#/media/File:Ruby-logo-notext.png'
-            }
-          ]
-          client.reply_message(event['replyToken'], messages)
+          if keywords.find { |keyword| event.message['text'].include?(keyword) }
+            @reply_result = client.reply_message(event['replyToken'], messages)
+          end
         end
       end
     }
 
-    head :ok
+    head @reply_result.nil? ? :bad_request : @reply_result.code
+  end
+
+  def keywords
+    ["きーわーど", "キーワード"]
+  end
+
+  def messages
+    [
+      {
+        type: 'text',
+        text: "text"
+      },
+      {
+        type: 'image',
+        originalContentUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Ruby-logo-notext.png',
+        previewImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Ruby-logo-notext.png'
+      }
+    ]
   end
 end
