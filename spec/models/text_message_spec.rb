@@ -18,4 +18,13 @@ RSpec.describe TextMessage, type: :model do
     text_message.valid?
     expect(text_message.errors[:content]).to include("has already been taken")
   end
+
+  it "returns message hash" do
+    text_message = TextMessage.create(content: "Test")
+    expected = {
+      type: "text",
+      text: "Test"
+    }
+    expect(text_message.message).to eq expected
+  end
 end
