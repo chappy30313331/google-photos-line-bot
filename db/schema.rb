@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_24_115702) do
+ActiveRecord::Schema.define(version: 2019_02_26_132903) do
+
+  create_table "image_messages", force: :cascade do |t|
+    t.string "media_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "keywords", force: :cascade do |t|
     t.string "name"

@@ -26,7 +26,7 @@ class LinebotController < ApplicationController
           if Keyword.pluck(:name).find { |keyword| event.message['text'].include?(keyword) }
             messages = [
               TextMessage.order("RANDOM()").first.message,
-              ImageMessage.new.message
+              ImageMessage.order("RANDOM()").first.message
             ]
             @reply_result = client.reply_message(event['replyToken'], messages)
           end
