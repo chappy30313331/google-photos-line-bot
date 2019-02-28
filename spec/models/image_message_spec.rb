@@ -19,13 +19,12 @@ RSpec.describe ImageMessage, type: :model do
     expect(image_message.errors[:media_item_id]).to include("has already been taken")
   end
 
-  # it "returns message hash" do
-  #   image_message = ImageMessage.new
-  #   expected = {
-  #     type: 'image',
-  #     originalContentUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Ruby-logo-notext.png',
-  #     previewImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Ruby-logo-notext.png'
-  #   }
-  #   expect(image_message.message).to eq expected
-  # end
+  it "returns message hash" do
+    FetchImageID.call
+    image_message = ImageMessage.first
+    message = image_message.message
+    expect(message[:type]).to eq "image"
+    expect(message[:originalContentUrl]).to match(/https:\/\/lh3\.googleusercontent\.com\/lr\/.*/)
+    expect(message[:previewImageUrl]).to match(/https:\/\/lh3\.googleusercontent\.com\/lr\/.*/)
+  end
 end
