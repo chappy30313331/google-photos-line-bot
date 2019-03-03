@@ -1,16 +1,18 @@
 class FetchImageID
 
   def self.call
-    results = fetch
-    
+    ids = []
+
+    body = fetch
     loop do
-      results["mediaItems"].each do |item|
-        image_message = ImageMessage.new(media_item_id: item["id"])
-        image_message.save!
+      body["mediaItems"].each do |item|
+        ids << item["id"]
       end
-      break if results["nextPageToken"].nil?
-      results = fetch(next_page_token: results["nextPageToken"])
+      break if body["nextPageToken"].nil?
+      body = fetch(next_page_token: body["nextPageToken"])
     end
+
+    ids
   end
 
   private
