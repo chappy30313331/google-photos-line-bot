@@ -20,8 +20,8 @@ RSpec.describe ImageMessage, type: :model do
   end
 
   it "returns message hash" do
-    FetchImageID.call
-    image_message = ImageMessage.first
+    image_message = ImageMessage.new(media_item_id: "Test")
+    image_message.instance_variable_set('@json', {"baseUrl" => "https://lh3.googleusercontent.com/lr/test"})
     message = image_message.message
     expect(message[:type]).to eq "image"
     expect(message[:originalContentUrl]).to match(/https:\/\/lh3\.googleusercontent\.com\/lr\/.*/)
