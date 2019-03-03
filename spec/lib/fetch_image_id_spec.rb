@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "FetchImageID" do
-  it "fetches all image IDs" do
-    expect{FetchImageID.call}.to change(ImageMessage, :count)
+  it "fetches image IDs" do
+    expect(FetchImageID.call.size).to be > 0
   end
 
-  it "fetches image IDs" do
+  it "fetches mediaItems json" do
     results = FetchImageID.send(:fetch)
     expect(results).to have_key("mediaItems")
   end
