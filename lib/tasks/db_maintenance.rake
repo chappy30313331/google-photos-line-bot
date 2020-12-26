@@ -1,5 +1,5 @@
 namespace :db_maintenance do
-  desc "Refresh image_message table"
+  desc 'Refresh image_message table'
   task refresh_image_message: :environment do
     ImageMessage.destroy_all
 

@@ -7,22 +7,20 @@ class ImageMessage < ApplicationRecord
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     headers = {
-      'Authorization'=>"Bearer #{AccessToken.instance.to_s}",
-      'Content-Type' =>"application/json"
+      'Authorization' => "Bearer #{AccessToken.instance}",
+      'Content-Type' => 'application/json'
     }
     response = http.get(uri.path, headers)
     @json = JSON.parse(response.body)
   end
 
   def message
-    if @json.nil?
-      fetch
-    end
+    fetch if @json.nil?
 
     {
-      type: "image",
-      originalContentUrl: @json["baseUrl"],
-      previewImageUrl: @json["baseUrl"]
+      type: 'image',
+      originalContentUrl: @json['baseUrl'],
+      previewImageUrl: @json['baseUrl']
     }
   end
 end
