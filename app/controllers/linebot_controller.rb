@@ -10,28 +10,17 @@ class LinebotController < ApplicationController
 
   def callback
     body = request.body.read
+    return head :bad_request unless client.validate_signature(body, request.env['HTTP_X_LINE_SIGNATURE'])
 
-    signature = request.env['HTTP_X_LINE_SIGNATURE']
-    head :bad_request unless client.validate_signature(body, signature)
+    client.parse_events_from(body).each do |event|
+      next if !event.is_a?(Line::Bot::Event::Message) || event.type != Line::Bot::Event::MessageType::Text
 
-    events = client.parse_events_from(body)
+      @keywords ||= Keyword.pluck(:name)
+      next if @keywords.none? { |keyword| event.message['text'].include?(keyword) }
 
-    events.each do |event|
-      case event
-      when Line::Bot::Event::Message
-        case event.type
-        when Line::Bot::Event::MessageType::Text
-          if Keyword.pluck(:name).find { |keyword| event.message['text'].include?(keyword) }
-            messages = [
-              TextMessage.order('RANDOM()').first.message,
-              ImageMessage.order('RANDOM()').first.message
-            ]
-            @reply_result = client.reply_message(event['replyToken'], messages)
-          end
-        end
-      end
+      messages = [TextMessage.order('RANDOM()').first.message, ImageMessage.order('RANDOM()').first.message]
+      client.reply_message(event['replyToken'], messages)
     end
-
-    head @reply_result.nil? ? :ok : @reply_result.code
+    head :ok
   end
 end

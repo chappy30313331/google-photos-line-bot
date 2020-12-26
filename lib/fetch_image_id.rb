@@ -17,24 +17,12 @@ class FetchImageID
 
   def self.fetch(next_page_token: nil)
     uri = URI.parse('https://photoslibrary.googleapis.com/v1/mediaItems:search')
-    headers = {
-      'Authorization' => "Bearer #{AccessToken.instance}",
-      'Content-Type' => 'application/json'
-    }
-    request = Net::HTTP::Post.new(uri, headers)
+    headers = { 'Content-Type' => 'application/json' }
+    params = { album_id: ENV['ALBUM_ID'] }
+    params[:pageToken] = next_page_token if next_page_token
 
-    body = { albumId: ENV['ALBUM_ID'] }
-    body[:pageToken] = next_page_token unless next_page_token.nil?
-    request.set_form_data(body)
-
-    options = {
-      use_ssl: uri.scheme == 'https'
-    }
-
-    response = Net::HTTP.start(uri.hostname, uri.port, options) do |http|
-      http.request(request)
-    end
-
-    JSON.parse(response.body)
+    response = HTTP.auth("Bearer #{AccessToken.instance}")
+                   .post(uri, headers: headers, json: params)
+    JSON.parse(response.body.to_s)
   end
 end
