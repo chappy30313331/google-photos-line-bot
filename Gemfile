@@ -44,6 +44,7 @@ end
 
 group :development do
   gem 'listen'
+  gem 'pre-commit', require: false
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
