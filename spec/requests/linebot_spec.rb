@@ -1,32 +1,32 @@
 require 'rails_helper'
 
-RSpec.describe "Linebot", type: :request do
-  describe "POST /callback" do
+RSpec.describe 'Linebot', type: :request do
+  describe 'POST /callback' do
     before do
       @params = {
-        destination: "xxxxxxxxxx", 
+        destination: 'xxxxxxxxxx',
         events: [
           {
-            replyToken: "replyToken",
-            type: "message",
-            timestamp: 1462629479859,
+            replyToken: 'replyToken',
+            type: 'message',
+            timestamp: 1_462_629_479_859,
             source: {
-              type: "user",
-              userId: "U4af4980629..."
+              type: 'user',
+              userId: 'U4af4980629...'
             },
             message: {
-              id: "325708",
-              type: "text",
-              text: "キーワード"
+              id: '325708',
+              type: 'text',
+              text: 'キーワード'
             }
           }
         ]
       }
     end
 
-    it "responds successfully" do
+    it 'responds successfully' do
       post callback_path, params: @params, as: :json
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:ok)
     end
   end
 end

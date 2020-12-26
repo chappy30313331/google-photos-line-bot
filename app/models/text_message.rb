@@ -3,6 +3,6 @@ class TextMessage < ApplicationRecord
   validates :content, uniqueness: true
 
   def message
-    {type: "text", text: content}
+    { type: 'text', text: content }
   end
 end
