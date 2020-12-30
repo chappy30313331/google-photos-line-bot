@@ -1,21 +1,25 @@
 class LinebotController < ApplicationController
   require 'line/bot'
 
-  def callback
-    body = request.body.read
-    signature = request.env['HTTP_X_LINE_SIGNATURE']
-    return head :bad_request unless client.validate_signature(body, signature)
+  before_action :validate_signature
 
-    client.parse_events_from(body).each do |event|
+  def callback
+    client.parse_events_from(request.body.read).each do |event|
       next unless replyable?(event)
 
-      messages = [TextMessage.order('RANDOM()').first.message, ImageMessage.order('RANDOM()').first.message]
+      messages = [TextMessage.sample.message, ImageMessage.sample.message]
       client.reply_message(event['replyToken'], messages)
     end
     head :ok
   end
 
   private
+
+  def validate_signature
+    body = request.body.read
+    signature = request.env['HTTP_X_LINE_SIGNATURE']
+    head :bad_request unless client.validate_signature(body, signature)
+  end
 
   def client
     @client ||= Line::Bot::Client.new do |config|
