@@ -9,7 +9,7 @@ class LinebotController < ApplicationController
     client.parse_events_from(body).each do |event|
       next unless replyable?(event)
 
-      messages = [TextMessage.order('RANDOM()').first.message, ImageMessage.order('RANDOM()').first.message]
+      messages = [TextMessage.sample.message, ImageMessage.sample.message]
       client.reply_message(event['replyToken'], messages)
     end
     head :ok
